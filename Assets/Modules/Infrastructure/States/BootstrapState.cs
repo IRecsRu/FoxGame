@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Modules.Infrastructure.LevelLoader;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 

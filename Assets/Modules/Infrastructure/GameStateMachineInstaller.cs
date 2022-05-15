@@ -1,9 +1,11 @@
-﻿using Modules.Infrastructure.States;
+﻿using Modules.Infrastructure.LevelLoader;
+using Modules.Infrastructure.States;
+using Photon.Realtime;
 using Zenject;
 
 namespace Modules.Infrastructure
 {
-	public class GameInstaller : MonoInstaller
+	public class GameStateMachineInstaller : MonoInstaller
 	{
 		public override void InstallBindings()
 		{
@@ -20,4 +22,5 @@ namespace Modules.Infrastructure
 			gameStateMachine.TryAddState(typeof(BootstrapState), new BootstrapState(gameStateMachine, sceneLoader));
 		}
 	}
+
 }

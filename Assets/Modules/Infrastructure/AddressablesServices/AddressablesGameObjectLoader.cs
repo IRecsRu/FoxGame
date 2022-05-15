@@ -7,13 +7,20 @@ namespace Modules.Infrastructure.AddressablesServices
 {
     public class AddressablesGameObjectLoader 
     {
-        private ResourceBusyHandler _resourceBusyHandler = new ResourceBusyHandler();
+        private readonly ResourceBusyHandler _resourceBusyHandler = new ResourceBusyHandler();
 
+        public async UniTask<T> Instantiate<T>(Transform transform, string key)
+        {
+            await AddressablesAssetLoader.CheckKeyErrorResult(key);
+            await PreloadGameObject(key);
+            return await Instantiate<T>(key, transform);
+        }
+        
         public async UniTask<GameObject> InstantiateGameObject(Transform transform, string key)
         {
             await AddressablesAssetLoader.CheckKeyErrorResult(key);
             await PreloadGameObject(key);
-            return await Instantiate(key, transform);
+            return await Instantiate<GameObject>(key, transform);
         }
 
         public async UniTask PreloadGameObject(string key)
@@ -26,7 +33,7 @@ namespace Modules.Infrastructure.AddressablesServices
             }
         }
 
-        private async UniTask<GameObject> Instantiate(string key, Transform transform)
+        private async UniTask<T> Instantiate<T>(string key, Transform transform)
         {
             if (await AddressablesAssetLoader.CheckKey(key))
             {
@@ -34,7 +41,7 @@ namespace Modules.Infrastructure.AddressablesServices
                 prefabHandle = await LoadAsyncOperation(prefabHandle);
 
                 _resourceBusyHandler.AddGameObject(key, prefabHandle.Result);
-                return prefabHandle.Result;
+                return prefabHandle.Result.GetComponent<T>();
             }
             else
             {

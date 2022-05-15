@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Modules.Infrastructure
+namespace Modules.Infrastructure.LevelLoader
 {
 	public static class TypeFinderOnScene
 	{
