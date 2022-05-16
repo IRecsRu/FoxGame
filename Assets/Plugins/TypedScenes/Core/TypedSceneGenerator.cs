@@ -3,7 +3,7 @@ using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.IO;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
@@ -18,6 +18,7 @@ namespace IJunior.TypedScenes
             var targetUnit = new CodeCompileUnit();
             var targetNamespace = new CodeNamespace(TypedSceneSettings.Namespace);
             var targetClass = new CodeTypeDeclaration(sceneName);
+            targetNamespace.Imports.Add(new CodeNamespaceImport("System.Threading.Tasks"));
             targetNamespace.Imports.Add(new CodeNamespaceImport("UnityEngine.SceneManagement"));
             targetNamespace.Imports.Add(new CodeNamespaceImport("UnityEngine.ResourceManagement.ResourceProviders"));
             targetClass.BaseTypes.Add("TypedScene");
@@ -55,7 +56,7 @@ namespace IJunior.TypedScenes
             loadMethod.Attributes = MemberAttributes.Public | MemberAttributes.Static;
 
             var loadingStatement = "LoadScene(_sceneName, loadSceneMode)";
-            loadMethod.ReturnType = new CodeTypeReference(typeof(UniTask<SceneInstance>));
+            loadMethod.ReturnType = new CodeTypeReference(typeof(Task<SceneInstance>));
             loadingStatement = "return " + loadingStatement;
 
             var loadingModeParameter = new CodeParameterDeclarationExpression(nameof(LoadSceneMode), "loadSceneMode = LoadSceneMode.Single");

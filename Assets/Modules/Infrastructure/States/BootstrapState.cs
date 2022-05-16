@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Modules.Infrastructure.LevelLoader;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
@@ -16,21 +16,18 @@ namespace Modules.Infrastructure.States
       _sceneLoader = sceneLoader;
     }
 
-    public async UniTask Enter()
+    public async Task Enter()
     {
-      if(SceneManager.GetActiveScene().buildIndex != 0)
-        await SceneManager.LoadSceneAsync(0);
-      
       await ProjectInitialization();
-      //_stateMachine.Enter<LoginState>();
+      await _stateMachine.Enter<LoginState>();
     }
 
-    public bool TryExit() =>
+    public async Task<bool> TryExit() =>
       true;
 
-    private async UniTask ProjectInitialization()
+    private async Task ProjectInitialization()
     {
-      await Addressables.InitializeAsync();
+      await Addressables.InitializeAsync().Task;
     }
 
   }

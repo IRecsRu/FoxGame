@@ -1,20 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 
 namespace Modules.Infrastructure.States
 {
-  public interface IState: IExitableState
+  public interface IState
   {
-    UniTask Enter();
-  }
-
-  public interface IPayloadedState<TPayload> : IExitableState
-  {
-    UniTask Enter(TPayload payload);
-  }
-  
-  public interface IExitableState
-  {
-     bool TryExit();
+    Task Enter();
+    Task<bool> TryExit();
   }
 }

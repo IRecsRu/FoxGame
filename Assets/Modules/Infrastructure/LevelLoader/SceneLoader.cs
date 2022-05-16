@@ -1,5 +1,5 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using Modules.Infrastructure.AddressablesServices;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -11,23 +11,20 @@ namespace Modules.Infrastructure.LevelLoader
 	public class SceneLoader
 	{
 		private const string LoadingCurtainKey = "LoadingCurtain";
-
 		private LoadingCurtain _loadingCurtain;
 
 		public SceneLoader() =>
 			BindLoadingCurtain();
 
-		private async UniTaskVoid BindLoadingCurtain()
+		private async void BindLoadingCurtain()
 		{
-			Debug.Log("TODO");
-			return;
-			AddressablesGameObjectLoader loader = new AddressablesGameObjectLoader();
+			AddressablesGameObjectLoader loader = new();
 			GameObject loadingCurtainObject = await loader.InstantiateGameObject(null, LoadingCurtainKey);
 			_loadingCurtain = loadingCurtainObject.GetComponent<LoadingCurtain>();
 			EndLoad();
 		}
 
-		public async UniTask StartLoad(Func<UniTask<SceneInstance>> task)
+		public async Task StartLoad(Func<Task<SceneInstance>> task)
 		{
 			await CheckLoadingCurtain();
 			_loadingCurtain.Show();
@@ -37,21 +34,21 @@ namespace Modules.Infrastructure.LevelLoader
 			await Initialization(sceneInstance);
 		}
 
-		private async UniTask CheckLoadingCurtain()
+		private async Task CheckLoadingCurtain()
 		{
 			while(_loadingCurtain == null)
-				await UniTask.Delay(100);
+				await Task.Delay(100);
 		}
 
-		private async UniTask Initialization(SceneInstance sceneInstance)
+		private async Task Initialization(SceneInstance sceneInstance)
 		{
 			Scene scene = sceneInstance.Scene;
 
 			if(!TypeFinderOnScene.TryGetType(out ILevelLoader maineMenuLoader, scene))
 				Debug.LogError($"There is no {nameof(ILevelLoader)} on the Scene {scene.name}");
-
+			
 			await maineMenuLoader.Initialization();
-
+			
 			Addressables.Release(sceneInstance);
 			EndLoad();
 		}

@@ -1,3 +1,4 @@
+using Modules.MainMenuScene.StateMachine;
 using Zenject;
 
 namespace Modules.MainMenuScene

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -11,21 +11,20 @@ namespace Modules.Infrastructure.AddressablesServices
 {
     public static class AddressablesAssetLoader
     {
-        public static async UniTask<T> LoadAssetAsync<T>(string key)
+        public static async Task<T> LoadAssetAsync<T>(string key)
         {
             await CheckKeyErrorResult(key);
             IResourceLocation location = await CheckLocation(key);
             AsyncOperationHandle<T> handle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(location);
-            
             await handle.Task;
 
             if (handle.Status == AsyncOperationStatus.Succeeded)
-                return handle.Result;
+                return  handle.Result;
             else
                 throw new InvalidOperationException(handle.Status.ToString());
         }
 
-        public static async UniTask<Scene> LoadSceneAsync(string sceneName, LoadSceneMode loadSceneMode)
+        public static async Task<Scene> LoadSceneAsync(string sceneName, LoadSceneMode loadSceneMode)
         {
             AsyncOperationHandle<SceneInstance> sceneHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, loadSceneMode);
             await sceneHandle.Task;
@@ -34,7 +33,7 @@ namespace Modules.Infrastructure.AddressablesServices
             return scene;
         }
 
-        public static async UniTask<bool> CheckKey(string key)
+        public static async Task<bool> CheckKey(string key)
         {
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException($"Null key {key}");
@@ -43,13 +42,13 @@ namespace Modules.Infrastructure.AddressablesServices
             return location != null;
         }
 
-        public static async UniTask CheckKeyErrorResult(string key)
+        public static async Task CheckKeyErrorResult(string key)
         {
             if (!await CheckKey(key))
                 Debug.LogError($"Key {key} not found. \nTo avoid errors, check the key before using it through the CheckKey method");
         }
 
-        private static async UniTask<IResourceLocation> CheckLocation(string key)
+        private static async Task<IResourceLocation> CheckLocation(string key)
         {
             AsyncOperationHandle<IList<IResourceLocation>> locationHandle = UnityEngine.AddressableAssets.Addressables.LoadResourceLocationsAsync(key);
             await locationHandle.Task;

@@ -17,6 +17,7 @@ namespace Modules.PhotonService
 		private static RoomOptions CreateRoomOptions(byte maxPlayers)
 		{
 			RoomOptions roomOptions = new();
+			roomOptions.PublishUserId = true;
 			roomOptions.MaxPlayers =  maxPlayers;
 			return roomOptions;
 		}

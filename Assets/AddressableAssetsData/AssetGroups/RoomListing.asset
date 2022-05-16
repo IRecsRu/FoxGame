@@ -25,6 +25,10 @@ MonoBehaviour:
     m_Address: RoomListing
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 3f0e225851ab292489351210477a4048
+    m_Address: LoadingCurtain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 601682f521c74484fa8974efd67f72a6, type: 2}
   m_SchemaSet:

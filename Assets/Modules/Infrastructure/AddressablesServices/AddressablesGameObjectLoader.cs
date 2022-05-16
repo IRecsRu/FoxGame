@@ -1,5 +1,5 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -9,21 +9,20 @@ namespace Modules.Infrastructure.AddressablesServices
     {
         private readonly ResourceBusyHandler _resourceBusyHandler = new ResourceBusyHandler();
 
-        public async UniTask<T> Instantiate<T>(Transform transform, string key)
+        public async Task<T> Instantiate<T>(Transform transform, string key)
         {
-            await AddressablesAssetLoader.CheckKeyErrorResult(key);
-            await PreloadGameObject(key);
-            return await Instantiate<T>(key, transform);
+            GameObject gameObject = await InstantiateGameObject(transform, key);
+            return gameObject.GetComponent<T>();
         }
         
-        public async UniTask<GameObject> InstantiateGameObject(Transform transform, string key)
+        public async Task<GameObject> InstantiateGameObject(Transform transform, string key)
         {
             await AddressablesAssetLoader.CheckKeyErrorResult(key);
             await PreloadGameObject(key);
-            return await Instantiate<GameObject>(key, transform);
+            return await Instantiate(key, transform);
         }
 
-        public async UniTask PreloadGameObject(string key)
+        public async Task PreloadGameObject(string key)
         {
             if (!_resourceBusyHandler.CheckOperationHandle(key))
             {
@@ -33,7 +32,7 @@ namespace Modules.Infrastructure.AddressablesServices
             }
         }
 
-        private async UniTask<T> Instantiate<T>(string key, Transform transform)
+        private async Task<GameObject> Instantiate(string key, Transform transform)
         {
             if (await AddressablesAssetLoader.CheckKey(key))
             {
@@ -41,7 +40,7 @@ namespace Modules.Infrastructure.AddressablesServices
                 prefabHandle = await LoadAsyncOperation(prefabHandle);
 
                 _resourceBusyHandler.AddGameObject(key, prefabHandle.Result);
-                return prefabHandle.Result.GetComponent<T>();
+                return prefabHandle.Result;
             }
             else
             {
@@ -49,7 +48,7 @@ namespace Modules.Infrastructure.AddressablesServices
             }
         }
 
-        private async UniTask<AsyncOperationHandle<GameObject>> LoadAsyncOperation(AsyncOperationHandle<GameObject> prefabHandle)
+        private async Task<AsyncOperationHandle<GameObject>> LoadAsyncOperation(AsyncOperationHandle<GameObject> prefabHandle)
         {
             await prefabHandle.Task;
 

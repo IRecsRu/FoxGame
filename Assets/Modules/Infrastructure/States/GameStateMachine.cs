@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Modules.Infrastructure.States
 {
   public class GameStateMachine
   {
-    private readonly Dictionary<Type, IExitableState> _states = new Dictionary<Type, IExitableState>();
-    private IExitableState _activeState;
+    private readonly Dictionary<Type, IState> _states = new();
+    private IState _activeState;
 
-    public bool TryAddState(Type type, IExitableState state)
+    public bool TryAddState(Type type, IState state)
     {
       if(_states.ContainsKey(type))
         return false;
@@ -18,35 +19,35 @@ namespace Modules.Infrastructure.States
       return true;
     }
     
-    public void Enter<TState>() where TState : class, IState
-    {
-      if(ChangeState(out TState state))
-        state.Enter();
-    }
+    public async Task Enter<TState>() where TState : class, IState =>
+      await TryChangeState<TState>();
 
-    public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadedState<TPayload>
+    private async Task<bool> TryChangeState<TState>() where TState : class, IState
     {
-      if(ChangeState<TState>(out TState state))
-        state.Enter(payload);
-    }
-
-    private bool ChangeState<TState>(out TState state) where TState : class, IExitableState
-    {
-      state = null;
-
-      if(_activeState != null && !_activeState.TryExit())
-      {
-        Debug.LogError("Cant changeState!");
+      if(!await TryExitActiveState())
         return false;
-      }
 
-      state = GetState<TState>();
+      TState state = GetState<TState>();
       _activeState = state;
+      await state.Enter();
       
       return true;
     }
+    
+    private async Task<bool> TryExitActiveState()
+    {
+      if(_activeState != null)
+      {
+        if(!await _activeState.TryExit())
+        {
+          Debug.LogError("Cant changeState!");
+          return false;
+        }
+      }
+      return true;
+    }
 
-    private TState GetState<TState>() where TState : class, IExitableState => 
+    private TState GetState<TState>() where TState : class, IState => 
       _states[typeof(TState)] as TState;
   }
 }
