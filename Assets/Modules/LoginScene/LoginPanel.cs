@@ -1,52 +1,52 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Modules.Infrastructure.States;
-using Modules.PhotonService;
+using Modules.Core.Infrastructure.States;
+using Modules.Core.PhotonService;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
-public class LoginPanel : MonoBehaviour
+namespace Modules.LoginScene
 {
-    private const string NickNameKey = "NickName";
-    
-    [SerializeField] private TMP_InputField _nickName;
-    [SerializeField] private Button _joinButton;
-    
-    private PhotonSettings _photonSettings;
-    private GameStateMachine _gameStateMachine;
-    
-    [Inject]
-    private void Constructor(PhotonSettings photonSettings, GameStateMachine gameStateMachine)
+    public class LoginPanel : MonoBehaviour
     {
-        _gameStateMachine = gameStateMachine;
-        _photonSettings = photonSettings;
-    }
+        private const string NickNameKey = "NickName";
+    
+        [SerializeField] private TMP_InputField _nickName;
+        [SerializeField] private Button _joinButton;
+    
+        private PhotonSettings _photonSettings;
+        private GameStateMachine _gameStateMachine;
+    
+        [Inject]
+        private void Constructor(PhotonSettings photonSettings, GameStateMachine gameStateMachine)
+        {
+            _gameStateMachine = gameStateMachine;
+            _photonSettings = photonSettings;
+        }
 
-    public void Initialization()
-    {
-        if(PlayerPrefs.HasKey(NickNameKey))
-            _nickName.text = PlayerPrefs.GetString(NickNameKey);
+        public void Initialization()
+        {
+            if(PlayerPrefs.HasKey(NickNameKey))
+                _nickName.text = PlayerPrefs.GetString(NickNameKey);
         
-        _joinButton.onClick.AddListener(OnJoin);
-    }
+            _joinButton.onClick.AddListener(OnJoin);
+        }
     
-    private async void OnJoin()
-    {
-        string nickName = _nickName.text;
+        private async void OnJoin()
+        {
+            string nickName = _nickName.text;
 
-        if(string.IsNullOrEmpty(nickName))
-            nickName = "TestUser" + Random.Range(0, 2000);
-        else
-            PlayerPrefs.SetString(NickNameKey, nickName);
+            if(string.IsNullOrEmpty(nickName))
+                nickName = "TestUser" + Random.Range(0, 2000);
+            else
+                PlayerPrefs.SetString(NickNameKey, nickName);
 
-        _photonSettings.SetNickName(nickName);
-        _joinButton.interactable = false;
-        await _gameStateMachine.Enter<MaineMenuState>();
+            _photonSettings.SetNickName(nickName);
+            _joinButton.interactable = false;
+            await _gameStateMachine.Enter<MaineMenuState>();
+        }
+
+
     }
-
-
 }

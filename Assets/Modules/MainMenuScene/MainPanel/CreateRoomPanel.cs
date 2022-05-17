@@ -1,5 +1,5 @@
 using System;
-using Modules.PhotonService;
+using Modules.Core.PhotonService;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;

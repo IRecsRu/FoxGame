@@ -15,6 +15,7 @@ using UnityEngine.UI;
 
 using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
+using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Photon.Pun.Demo.Asteroids

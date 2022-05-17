@@ -7,6 +7,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using Photon.Pun;
+
 namespace Photon.Pun.UtilityScripts
 {
     using System.Collections;

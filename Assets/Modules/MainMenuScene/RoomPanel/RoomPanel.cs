@@ -1,3 +1,4 @@
+using Modules.Core.Infrastructure.States;
 using Modules.MainMenuScene.StateMachine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -14,16 +15,27 @@ namespace Modules.MainMenuScene.RoomPanel
         [SerializeField] private Button _connectButton;
         [SerializeField] private Button _leaveButton;
         [SerializeField] private PlayersInRoomPamel _playersInRoomPamel;
-        
+
+        private GameStateMachine _gameStateMachine;
         private SetActiveChangerOnMainMenuState _activeChanger;
         
         [Inject]
-        public void Constructor(MainMenuStateMachine mainMenuStateMachine) =>
-            _activeChanger = new(mainMenuStateMachine,MainMenuState.Room, gameObject);
+        public void Constructor(MainMenuStateMachine mainMenuStateMachine, GameStateMachine gameStateMachine)
+        {
+            _activeChanger = new(mainMenuStateMachine, MainMenuState.Room, gameObject);
+            _gameStateMachine = gameStateMachine;
+        }
 
         private void Awake()
         {
+            _connectButton.onClick.AddListener(OnJoin);
             _leaveButton.onClick.AddListener(OnLeaveRoom);
+        }
+        private async void OnJoin()
+        {
+            _connectButton.onClick.RemoveListener(OnJoin);
+            _leaveButton.onClick.RemoveListener(OnLeaveRoom);
+            await _gameStateMachine.Enter<GameState>();
         }
 
         public override void OnEnable()

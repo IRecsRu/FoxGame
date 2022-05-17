@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ExitGames.Client.Photon;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.Procedural
 {

@@ -9,6 +9,8 @@
 // ----------------------------------------------------------------------------
 
 
+using Photon.Pun;
+
 namespace Photon.Pun
 {
     using UnityEngine;

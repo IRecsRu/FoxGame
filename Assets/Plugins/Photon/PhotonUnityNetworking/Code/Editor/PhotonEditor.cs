@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
+using Photon.Pun;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.Compilation;

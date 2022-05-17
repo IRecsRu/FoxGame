@@ -14,6 +14,7 @@ using System.Collections;
 
 using Photon.Pun.Demo.SlotRacer.Utils;
 using Photon.Pun.UtilityScripts;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.SlotRacer
 {

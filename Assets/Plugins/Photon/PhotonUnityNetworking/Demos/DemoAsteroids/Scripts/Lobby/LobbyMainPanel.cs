@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Realtime;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 

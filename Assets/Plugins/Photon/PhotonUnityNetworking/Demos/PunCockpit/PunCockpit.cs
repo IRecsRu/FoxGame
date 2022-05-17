@@ -16,6 +16,7 @@ using UnityEngine.UI;
 using Photon.Pun.Demo.Cockpit.Forms;
 using Photon.Pun.Demo.Shared;
 using Photon.Realtime;
+using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Photon.Pun.Demo.Cockpit

@@ -177,7 +177,7 @@ namespace Photon.Pun.UtilityScripts
             }
         }
 
-        public virtual void SpawnObjects()
+        public async virtual void SpawnObjects()
         {
             if (this.PrefabsToInstantiate != null)
             {
@@ -192,7 +192,7 @@ namespace Photon.Pun.UtilityScripts
                     GetSpawnPoint(out spawnPos, out spawnRot);
 
 
-                    var newobj = PhotonNetwork.Instantiate(o.name, spawnPos, spawnRot, 0);
+                    var newobj = await PhotonNetwork.Instantiate(o.name, spawnPos, spawnRot, 0);
                     SpawnedObjects.Push(newobj);
                 }
             }

@@ -45,6 +45,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6f66dbdc91463945a37f26f93345213, type: 2}
   - {fileID: 11400000, guid: fdcc9b728963ce649a37f07c88e337b8, type: 2}
   - {fileID: 11400000, guid: 36e0f951bab3c3042969673cf0f1ef6e, type: 2}
+  - {fileID: 11400000, guid: e2792de3c60662f4d86d74ef75a34f58, type: 2}
+  - {fileID: 11400000, guid: f0a72774119bb1f47aa262d46d9c7037, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -123,4 +125,4 @@ MonoBehaviour:
     - key: PrivateIpAddress
       value: 26.205.46.81
     - key: PrivateIpAddress_1
-      value: 192.168.1.2
+      value: 192.168.1.3

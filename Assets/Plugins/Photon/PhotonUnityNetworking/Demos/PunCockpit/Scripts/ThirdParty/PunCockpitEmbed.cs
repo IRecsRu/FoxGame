@@ -14,6 +14,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Photon.Pun.UtilityScripts;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.Cockpit
 {

@@ -8,6 +8,8 @@
 // <author>developer@exitgames.com</author>
 // ----------------------------------------------------------------------------
 
+using Photon.Pun;
+
 namespace Photon.Pun
 {
     using UnityEditor;

@@ -19,6 +19,7 @@ using UnityEngine;
 
 //using Photon.Pun;
 using Photon.Realtime;
+using Photon.Pun;
 
 namespace Photon.Pun.UtilityScripts
 {

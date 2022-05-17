@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Photon.Realtime;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.PunBasics
 {

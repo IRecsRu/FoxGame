@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Modules.Infrastructure;
-using Modules.PhotonService;
+using Modules.Core.Infrastructure;
+using Modules.Core.PhotonService;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;

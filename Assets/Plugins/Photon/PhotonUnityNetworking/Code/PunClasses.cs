@@ -9,6 +9,16 @@
 // ----------------------------------------------------------------------------
 
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
+using ExitGames.Client.Photon;
+using Modules.Core.Infrastructure.AddressablesServices;
+using Photon.Realtime;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
 #pragma warning disable 1587
 /// \defgroup publicApi Public API
 /// \brief Groups the most important classes that you need to understand early on.
@@ -23,16 +33,6 @@
 
 namespace Photon.Pun
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using ExitGames.Client.Photon;
-    using UnityEngine;
-    using UnityEngine.SceneManagement;
-    using Photon.Realtime;
-    using SupportClassPun = ExitGames.Client.Photon.SupportClass;
-
-
     /// <summary>Replacement for RPC attribute with different name. Used to flag methods as remote-callable.</summary>
     public class PunRPC : Attribute
     {
@@ -100,7 +100,7 @@ namespace Photon.Pun
     /// Visual Studio and MonoDevelop should provide the list of methods when you begin typing "override".
     /// <b>Your implementation does not have to call "base.method()".</b>
     ///
-    /// This class implements all callback interfaces and extends <see cref="Photon.Pun.MonoBehaviourPun"/>.
+    /// This class implements all callback interfaces and extends <see cref="MonoBehaviourPun"/>.
     /// </remarks>
     /// \ingroup callbacks
     // the documentation for the interface methods becomes inherited when Doxygen builds it.
@@ -856,38 +856,19 @@ namespace Photon.Pun
     /// </remarks>
     public class DefaultPool : IPunPrefabPool
     {
-        /// <summary>Contains a GameObject per prefabId, to speed up instantiation.</summary>
-        public readonly Dictionary<string, GameObject> ResourceCache = new Dictionary<string, GameObject>();
-
+        private readonly AddressablesGameObjectLoader _loader = new();
         /// <summary>Returns an inactive instance of a networked GameObject, to be used by PUN.</summary>
         /// <param name="prefabId">String identifier for the networked object.</param>
         /// <param name="position">Location of the new object.</param>
         /// <param name="rotation">Rotation of the new object.</param>
         /// <returns></returns>
-        public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
+        public async Task<GameObject> Instantiate(string prefabId, Vector3 position, Quaternion rotation)
         {
-            GameObject res = null;
-            bool cached = this.ResourceCache.TryGetValue(prefabId, out res);
-            if (!cached)
-            {
-                res = Resources.Load<GameObject>(prefabId);
-                if (res == null)
-                {
-                    Debug.LogError("DefaultPool failed to load \"" + prefabId + "\". Make sure it's in a \"Resources\" folder. Or use a custom IPunPrefabPool.");
-                }
-                else
-                {
-                    this.ResourceCache.Add(prefabId, res);
-                }
-            }
-
-            bool wasActive = res.activeSelf;
-            if (wasActive) res.SetActive(false);
-
-            GameObject instance =GameObject.Instantiate(res, position, rotation) as GameObject;
-
-            if (wasActive) res.SetActive(true);
-            return instance;
+            GameObject instance = await _loader.InstantiateGameObject(null, prefabId);
+            instance.transform.position = position;
+            instance.transform.rotation = rotation;
+            
+            return instance ;
         }
 
         /// <summary>Simply destroys a GameObject.</summary>

@@ -9,6 +9,9 @@
 // ----------------------------------------------------------------------------
 
 
+using System.Threading.Tasks;
+using Photon.Pun;
+
 namespace Photon.Pun
 {
     using System.Diagnostics;
@@ -2470,7 +2473,7 @@ namespace Photon.Pun
         }
 
 
-        public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
+        public static async Task<GameObject> Instantiate(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
         {
             if (CurrentRoom == null)
             {
@@ -2479,16 +2482,16 @@ namespace Photon.Pun
             }
 
             Pun.InstantiateParameters netParams = new InstantiateParameters(prefabName, position, rotation, group, data, currentLevelPrefix, null, LocalPlayer, ServerTimestamp);
-            return NetworkInstantiate(netParams, false);
+            return await NetworkInstantiate(netParams, false);
         }
 
         [Obsolete("Renamed. Use InstantiateRoomObject instead")]
-        public static GameObject InstantiateSceneObject(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
+        public static async Task<GameObject> InstantiateSceneObject(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
         {
-            return InstantiateRoomObject(prefabName, position, rotation, group, data);
+            return await InstantiateRoomObject(prefabName, position, rotation, group, data);
         }
 
-        public static GameObject InstantiateRoomObject(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
+        public static async Task<GameObject> InstantiateRoomObject(string prefabName, Vector3 position, Quaternion rotation, byte group = 0, object[] data = null)
         {
             if (CurrentRoom == null)
             {
@@ -2499,13 +2502,13 @@ namespace Photon.Pun
             if (LocalPlayer.IsMasterClient)
             {
                 Pun.InstantiateParameters netParams = new InstantiateParameters(prefabName, position, rotation, group, data, currentLevelPrefix, null, LocalPlayer, ServerTimestamp);
-                return NetworkInstantiate(netParams, true);
+                return await NetworkInstantiate(netParams, true);
             }
 
             return null;
         }
 
-        private static GameObject NetworkInstantiate(Hashtable networkEvent, Player creator)
+        private static async Task<GameObject> NetworkInstantiate(Hashtable networkEvent, Player creator)
         {
 
             // some values always present:
@@ -2569,13 +2572,13 @@ namespace Photon.Pun
 
 
             Pun.InstantiateParameters netParams = new InstantiateParameters(prefabName, position, rotation, group, incomingInstantiationData, objLevelPrefix, viewsIDs, creator, serverTime);
-            return NetworkInstantiate(netParams, false, true);
+            return await NetworkInstantiate(netParams, false, true);
         }
 
 
         private static readonly HashSet<string> PrefabsWithoutMagicCallback = new HashSet<string>();
 
-        private static GameObject NetworkInstantiate(Pun.InstantiateParameters parameters, bool roomObject = false, bool instantiateEvent = false)
+        private static async Task<GameObject> NetworkInstantiate(Pun.InstantiateParameters parameters, bool roomObject = false, bool instantiateEvent = false)
         {
             //Instantiate(name, pos, rot)
             //pv[] GetPhotonViewsInChildren()
@@ -2586,7 +2589,7 @@ namespace Photon.Pun
             GameObject go = null;
             PhotonView[] photonViews;
 
-            go = prefabPool.Instantiate(parameters.prefabName, parameters.position, parameters.rotation);
+            go = await prefabPool.Instantiate(parameters.prefabName, parameters.position, parameters.rotation);
 
 
             if (go == null)

@@ -1,4 +1,7 @@
 ﻿
+using System.Threading.Tasks;
+using Photon.Pun;
+
 namespace Photon.Pun
 {
     using UnityEngine;
@@ -126,7 +129,7 @@ namespace Photon.Pun
         /// <param name="position">The position for the instance.</param>
         /// <param name="rotation">The rotation for the instance.</param>
         /// <returns>A disabled instance to use by PUN or null if the prefabId is unknown.</returns>
-        GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation);
+        Task<GameObject> Instantiate(string prefabId, Vector3 position, Quaternion rotation);
 
         /// <summary>
         /// Called to destroy (or just return) the instance of a prefab. It's disabled and the pool may reset and cache it for later use in Instantiate.

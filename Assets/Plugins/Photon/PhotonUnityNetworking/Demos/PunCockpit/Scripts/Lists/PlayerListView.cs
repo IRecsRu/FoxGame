@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 using Photon.Realtime;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.Cockpit
 {

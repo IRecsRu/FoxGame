@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 using Photon.Realtime;
+using Photon.Pun;
 
 namespace Photon.Pun.Demo.Cockpit
 {

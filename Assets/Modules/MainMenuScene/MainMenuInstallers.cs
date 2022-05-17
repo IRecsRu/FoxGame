@@ -9,4 +9,5 @@ namespace Modules.MainMenuScene
             Container.Bind<MainMenuStateMachine>().FromNew().AsSingle();
 
     }
+
 }
